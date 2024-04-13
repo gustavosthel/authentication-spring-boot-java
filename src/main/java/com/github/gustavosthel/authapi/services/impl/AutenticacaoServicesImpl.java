@@ -3,6 +3,7 @@ package com.github.gustavosthel.authapi.services.impl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.github.gustavosthel.authapi.dtos.AuthDto;
 import com.github.gustavosthel.authapi.models.Usuario;
 import com.github.gustavosthel.authapi.repositories.UsuarioRepositories;
@@ -52,5 +53,20 @@ public class AutenticacaoServicesImpl implements AutenticacaoServices {
         return LocalDateTime.now()
                .plusHours(8)
                .toInstant(ZoneOffset.of("-03:00"));
+    }
+
+    public String validaTokenJwt(String token) {
+        try {
+
+            Algorithm algorithm = Algorithm.HMAC256("my-secret");
+
+            return JWT.require(algorithm)
+                    .withIssuer("auth-api")
+                    .build()
+                    .verify(token)
+                    .getSubject();
+        } catch (JWTVerificationException exception) {
+            return "";
+        }
     }
 }

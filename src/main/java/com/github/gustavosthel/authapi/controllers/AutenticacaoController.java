@@ -26,4 +26,5 @@ public class AutenticacaoController {
         authenticationManager.authenticate(usuarioAutenticationToken);
         return autenticacaoServices.obterToken(authDto);
     }
+
 }
